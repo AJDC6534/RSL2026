@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Ramadan Digital Skills League 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07090f;
+  --surface:  #0e1120;
+  --panel:    #141828;
+  --card:     #1a2035;
+  --border:   #252f4a;
+  --border2:  #2e3a5e;
+  --gold:     #d4a843;
+  --gold-l:   #f0c96a;
+  --gold-d:   #6b4e13;
+  --teal:     #2dd4bf;
+  --blue:     #3b82f6;
+  --pink:     #ec4899;
+  --orange:   #f97316;
+  --cyan:     #06b6d4;
+  --red:      #ef4444;
+  --green:    #22c55e;
+  --text:     #e0ddd5;
+  --muted:    #7a849e;
+  --muted2:   #4a546a;
+  --ace-c:    #3b82f6;
+  --arena-c:  #ec4899;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { height:100%; }
+body {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-moon { font-size: 28px; display:block; margin-bottom:8px; }
+.logo-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.3;
+}
+.logo-sub {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.sidebar-nav { padding: 16px 0; flex: 1; }
+.nav-section {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  padding: 12px 20px 6px;
+  font-weight: 700;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-item.active {
+  color: var(--gold-l);
+  background: rgba(212,168,67,0.07);
+  border-left-color: var(--gold);
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto;
+  background: rgba(212,168,67,0.2);
+  color: var(--gold-l);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.page-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse2 2s ease-in-out infinite;
+}
+@keyframes pulse2 {
+  0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}
+  50%{box-shadow:0 0 0 5px rgba(34,197,94,0)}
+}
+.conn-label { font-size: 11px; color: var(--muted); }
+
+/* ── CONTENT ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+}
+
+/* ── PAGE SECTIONS ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-body { padding: 20px; }
+
+/* ── FORM ELEMENTS ── */
+.form-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+input, select {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+input:focus, select:focus { border-color: var(--gold-d); }
+select option { background: var(--panel); }
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: linear-gradient(135deg, #a07520, var(--gold));
+  color: #fff;
+}
+.btn-primary:hover { background: linear-gradient(135deg, #b8882a, var(--gold-l)); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+.btn-ghost:hover { border-color: var(--border); color: var(--text); }
+.btn-danger {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #fca5a5;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.btn-danger:hover { background: rgba(239,68,68,0.2); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-success {
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.3);
+  color: #86efac;
+}
+.btn-success:hover { background: rgba(34,197,94,0.2); }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 12px 14px;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(37,47,74,0.5);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.015); }
+
+/* ── DEPT BADGE ── */
+.dept-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 100px;
+}
+.dept-ACE {
+  background: rgba(59,130,246,0.12);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: #93c5fd;
+}
+.dept-ARENA {
+  background: rgba(236,72,153,0.12);
+  border: 1px solid rgba(236,72,153,0.3);
+  color: #f9a8d4;
+}
+
+/* ── CAT BADGE ── */
+.cat-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.cat-ace1   { background:rgba(59,130,246,.12);  border:1px solid rgba(59,130,246,.3);  color:#93c5fd; }
+.cat-ace2   { background:rgba(6,182,212,.12);   border:1px solid rgba(6,182,212,.3);   color:#67e8f9; }
+.cat-arena1 { background:rgba(236,72,153,.12);  border:1px solid rgba(236,72,153,.3);  color:#f9a8d4; }
+.cat-arena2 { background:rgba(249,115,22,.12);  border:1px solid rgba(249,115,22,.3);  color:#fdba74; }
+
+/* ── POINTS BADGE ── */
+.pts-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold-l);
+}
+
+/* ── AVATAR ── */
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ── SCORE INPUT ROW ── */
+.score-inline-input {
+  width: 70px;
+  padding: 5px 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ── STAT MINI CARDS ── */
+.stat-mini {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stat-mini-icon { font-size: 28px; }
+.stat-mini-val {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--gold-l);
+  line-height: 1;
+}
+.stat-mini-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* ── EMPTY STATE ── */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 999;
+  display: none;
+  animation: slideIn 0.3s ease;
+  max-width: 320px;
+}
+#toast.success { background:#0f4a1f; border:1px solid #22c55e; color:#86efac; }
+#toast.error   { background:#4a0f0f; border:1px solid #ef4444; color:#fca5a5; }
+@keyframes slideIn {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── LEADERBOARD RANK ── */
+.rank-num {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+.rank-1 { color: var(--gold-l); }
+.rank-2 { color: #93c5fd; }
+.rank-3 { color: #c8a87a; }
+.rank-n { color: var(--muted); }
+
+.score-bar-wrap {
+  width: 100%; height: 4px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px; overflow: hidden; margin-top: 4px;
+}
+.score-bar { height: 100%; border-radius: 2px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  display: none;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 440px;
+  animation: fadeUp 0.2s ease;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidebar { width: 60px; }
+  .nav-item span, .logo-title, .logo-sub, .nav-section, .nav-badge { display: none; }
+  .logo-moon { margin: 0 auto; display: block; text-align: center; }
+  .sidebar-logo { padding: 16px 10px; text-align: center; }
+  .nav-item { padding: 12px; justify-content: center; }
+  .nav-icon { width: auto; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+.section-head {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-head::after { content:''; flex:1; height:1px; background:var(--border); }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-moon">🌙</span>
+    <div class="logo-title">Ramadan Digital<br>Skills League</div>
+    <div class="logo-sub">ADMIN DASHBOARD</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <a class="nav-item active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">📊</span><span>Dashboard</span>
+    </a>
+
+    <div class="nav-section">Management</div>
+    <a class="nav-item" onclick="showPage('students',this)">
+      <span class="nav-icon">👥</span><span>Students</span>
+      <span class="nav-badge" id="badge-students">0</span>
+    </a>
+    <a class="nav-item" onclick="showPage('competitions',this)">
+      <span class="nav-icon">🏆</span><span>Competitions</span>
+      <span class="nav-badge" id="badge-comps">0</span>
+    </a>
+    <a class="nav-item" onclick="showPage('scores',this)">
+      <span class="nav-icon">⚡</span><span>Enter Scores</span>
+    </a>
+
+    <div class="nav-section">Results</div>
+    <a class="nav-item" onclick="showPage('leaderboard',this)">
+      <span class="nav-icon">🎖️</span><span>Leaderboard</span>
+    </a>
+
+    <div class="nav-section">Public</div>
+    <a class="nav-item" href="/leaderboard.html" target="_blank">
+      <span class="nav-icon">🌙</span><span>Live Display</span>
+      <span style="margin-left:auto;font-size:10px;color:var(--muted2)">↗</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="topbar-title">Dashboard</div>
+      <div class="page-sub" id="topbar-sub">Overview of the Ramadan Digital Skills League</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="status-dot" id="conn-dot" style="background:var(--muted2)"></div>
+      <div class="conn-label" id="conn-label">Connecting…</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── PAGE: DASHBOARD ── -->
+    <div id="page-dashboard" class="page active">
+      <div class="grid-3" id="stat-cards" style="margin-bottom:24px">
+        <div class="stat-mini"><div class="stat-mini-icon">👥</div><div><div class="stat-mini-val" id="s-students">—</div><div class="stat-mini-label">Students</div></div></div>
+        <div class="stat-mini"><div class="stat-mini-icon">🏆</div><div><div class="stat-mini-val" id="s-comps">—</div><div class="stat-mini-label">Competitions</div></div></div>
+        <div class="stat-mini"><div class="stat-mini-icon">📝</div><div><div class="stat-mini-val" id="s-scores">—</div><div class="stat-mini-label">Scores Recorded</div></div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🥇 Overall Top 5</div>
+          </div>
+          <div class="card-body" id="dash-overall"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">⚡ Recent Scores</div>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('scores', document.querySelector('[onclick*=scores]'))">+ Add Score</button>
+          </div>
+          <div class="card-body" id="dash-recent"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🖥️ Ramadan Code Quest — Top 3</div></div>
+          <div class="card-body" id="dash-ace1"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚡ Fast-Tech Firdaus — Top 3</div></div>
+          <div class="card-body" id="dash-ace2"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🎨 Crescent Creative Studio — Top 3</div></div>
+          <div class="card-body" id="dash-arena1"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🌟 Digital Suhoor Designers — Top 3</div></div>
+          <div class="card-body" id="dash-arena2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE: STUDENTS ── -->
+    <div id="page-students" class="page">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><div class="card-title">➕ Add Student</div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group" style="flex:2">
+              <label>Full Name</label>
+              <input id="st-name" type="text" placeholder="e.g. Sara Al-Rashid">
+            </div>
+            <div class="form-group">
+              <label>Programme</label>
+              <select id="st-dept">
+                <option value="ACE">ACE — Aptech Computer</option>
+                <option value="ARENA">ARENA — Multimedia</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:0">
+              <label>&nbsp;</label>
+              <button class="btn btn-primary" onclick="addStudent()">✦ Add Student</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">👥 All Students</div>
+          <span style="font-size:12px;color:var(--muted)" id="students-count"></span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Programme</th>
+                  <th>Registered</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody">
+                <tr><td colspan="4"><div class="empty"><div class="empty-icon">👥</div>No students yet</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE: COMPETITIONS ── -->
+    <div id="page-competitions" class="page">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><div class="card-title">➕ Add Competition</div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group" style="flex:2">
+              <label>Competition Name</label>
+              <input id="cp-name" type="text" placeholder="e.g. Coding Speed Test">
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="cp-cat">
+                <option value="ace1">🖥️ Ramadan Code Quest (ACE Wk1–2)</option>
+                <option value="ace2">⚡ Fast-Tech Firdaus (ACE Wk3–4)</option>
+                <option value="arena1">🎨 Crescent Creative Studio (ARENA Wk1–2)</option>
+                <option value="arena2">🌟 Digital Suhoor Designers (ARENA Wk3–4)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input id="cp-date" type="date">
+            </div>
+            <div class="form-group" style="flex:0">
+              <label>&nbsp;</label>
+              <button class="btn btn-primary" onclick="addCompetition()">✦ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏆 All Competitions</div>
+          <span style="font-size:12px;color:var(--muted)" id="comps-count"></span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Competition</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="comps-tbody">
+                <tr><td colspan="4"><div class="empty"><div class="empty-icon">🏆</div>No competitions yet</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE: SCORES ── -->
+    <div id="page-scores" class="page">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><div class="card-title">⚡ Enter / Update Score</div></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group" style="flex:2">
+              <label>Student</label>
+              <select id="sc-student"></select>
+            </div>
+            <div class="form-group" style="flex:2">
+              <label>Competition</label>
+              <select id="sc-comp"></select>
+            </div>
+            <div class="form-group">
+              <label>Points (0–100)</label>
+              <input id="sc-pts" type="number" min="0" max="100" placeholder="e.g. 85">
+            </div>
+            <div class="form-group" style="flex:0">
+              <label>&nbsp;</label>
+              <button class="btn btn-primary" onclick="addScore()">✦ Save Score</button>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px">
+            💡 Saving a score for the same student + competition will <strong>update</strong> the existing score.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📝 All Scores</div>
+          <div style="display:flex;gap:8px">
+            <select id="scores-filter-comp" onchange="renderScores()" style="padding:6px 10px;font-size:12px;background:var(--panel);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+              <option value="">All Competitions</option>
+            </select>
+            <select id="scores-filter-dept" onchange="renderScores()" style="padding:6px 10px;font-size:12px;background:var(--panel);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+              <option value="">All Depts</option>
+              <option value="ACE">ACE</option>
+              <option value="ARENA">ARENA</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Competition</th>
+                  <th>Category</th>
+                  <th>Points</th>
+                  <th>Updated</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="scores-tbody">
+                <tr><td colspan="6"><div class="empty"><div class="empty-icon">📝</div>No scores yet</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE: LEADERBOARD ── -->
+    <div id="page-leaderboard" class="page">
+
+      <!-- Overall -->
+      <div class="section-head">🏆 Overall Standings — Grand Sultan Race</div>
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>#</th><th>Student</th><th>Programme</th><th>Code Quest</th><th>Fast-Tech</th><th>Creative</th><th>Suhoor</th><th>Total</th></tr>
+              </thead>
+              <tbody id="lb-overall"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Per category -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🖥️ Ramadan Code Quest</div><span class="cat-badge cat-ace1">ACE Wk1–2</span></div>
+          <div class="card-body" style="padding:0"><div class="table-wrap"><table><thead><tr><th>#</th><th>Student</th><th>Points</th></tr></thead><tbody id="lb-ace1"></tbody></table></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚡ Fast-Tech Firdaus</div><span class="cat-badge cat-ace2">ACE Wk3–4</span></div>
+          <div class="card-body" style="padding:0"><div class="table-wrap"><table><thead><tr><th>#</th><th>Student</th><th>Points</th></tr></thead><tbody id="lb-ace2"></tbody></table></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🎨 Crescent Creative Studio</div><span class="cat-badge cat-arena1">ARENA Wk1–2</span></div>
+          <div class="card-body" style="padding:0"><div class="table-wrap"><table><thead><tr><th>#</th><th>Student</th><th>Points</th></tr></thead><tbody id="lb-arena1"></tbody></table></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🌟 Digital Suhoor Designers</div><span class="cat-badge cat-arena2">ARENA Wk3–4</span></div>
+          <div class="card-body" style="padding:0"><div class="table-wrap"><table><thead><tr><th>#</th><th>Student</th><th>Points</th></tr></thead><tbody id="lb-arena2"></tbody></table></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ── TOAST ── -->
+<div id="toast"></div>
+
+<!-- ── CONFIRM MODAL ── -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <div class="modal-title">⚠️ Confirm Delete</div>
+    <div id="confirm-msg" style="color:var(--muted);font-size:14px;line-height:1.6"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let state = { students: [], competitions: [], scores: [] };
+let confirmCb = null;
+
+// ── API BASE ──
+const API = '/api';
+
+// ── TOAST ──
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = type;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// ── CONFIRM MODAL ──
+function confirmModal(msg, cb) {
+  document.getElementById('confirm-msg').textContent = msg;
+  document.getElementById('confirm-ok').onclick = () => { closeConfirm(); cb(); };
+  document.getElementById('confirm-modal').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirm-modal').classList.remove('open');
+}
+
+// ── PAGE NAV ──
+const pageMeta = {
+  dashboard:    { title:'Dashboard',    sub:'Live overview of all standings' },
+  students:     { title:'Students',     sub:'Add and manage registered students' },
+  competitions: { title:'Competitions', sub:'Define competitions in each category' },
+  scores:       { title:'Enter Scores', sub:'Record and update student points' },
+  leaderboard:  { title:'Leaderboard',  sub:'Full standings across all categories' },
+};
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  const m = pageMeta[id] || {};
+  document.getElementById('topbar-title').textContent = m.title||id;
+  document.getElementById('topbar-sub').textContent = m.sub||'';
+  if(id==='leaderboard') loadLeaderboard();
+  if(id==='dashboard')   loadDashboard();
+}
+
+// ── HELPERS ──
+function initials(name) {
+  return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+}
+
+const COLORS = ['#3b82f6','#ec4899','#10b981','#f97316','#a855f7','#06b6d4','#eab308','#ef4444','#14b8a6','#f43f5e','#84cc16','#8b5cf6'];
+function colorFor(name) {
+  let h = 0;
+  for(let c of name) h = (h*31 + c.charCodeAt(0)) & 0xfffffff;
+  return COLORS[h % COLORS.length];
+}
+
+function avatarHtml(name, size=32) {
+  const c = colorFor(name);
+  return `<div class="avatar" style="background:linear-gradient(135deg,${c}99,${c});width:${size}px;height:${size}px">${initials(name)}</div>`;
+}
+
+const CAT_LABELS = {
+  ace1:'Ramadan Code Quest', ace2:'Fast-Tech Firdaus',
+  arena1:'Crescent Creative Studio', arena2:'Digital Suhoor Designers'
+};
+
+function fmtDate(d) {
+  if(!d) return '—';
+  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+
+// ── LOAD ALL DATA ──
+async function loadAll() {
+  try {
+    const [students, competitions, scores] = await Promise.all([
+      fetch(`${API}/students`).then(r=>r.json()),
+      fetch(`${API}/competitions`).then(r=>r.json()),
+      fetch(`${API}/scores`).then(r=>r.json()),
+    ]);
+    state.students = students;
+    state.competitions = competitions;
+    state.scores = scores;
+    document.getElementById('conn-dot').style.background = 'var(--green)';
+    document.getElementById('conn-label').textContent = 'Connected';
+    updateBadges();
+    renderStudents();
+    renderCompetitions();
+    renderScoreDropdowns();
+    renderScoresFilterComp();
+    renderScores();
+    loadDashboard();
+  } catch(e) {
+    document.getElementById('conn-dot').style.background = '#ef4444';
+    document.getElementById('conn-label').textContent = 'Offline';
+    toast('Failed to connect to server', 'error');
+  }
+}
+
+function updateBadges() {
+  document.getElementById('badge-students').textContent = state.students.length;
+  document.getElementById('badge-comps').textContent = state.competitions.length;
+  document.getElementById('s-students').textContent = state.students.length;
+  document.getElementById('s-comps').textContent = state.competitions.length;
+  document.getElementById('s-scores').textContent = state.scores.length;
+}
+
+// ── STUDENTS ──
+async function addStudent() {
+  const name = document.getElementById('st-name').value.trim();
+  const dept = document.getElementById('st-dept').value;
+  if(!name) { toast('Please enter a student name','error'); return; }
+  try {
+    const res = await fetch(`${API}/students`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,dept})});
+    if(!res.ok) throw new Error((await res.json()).error);
+    const s = await res.json();
+    state.students.push(s);
+    state.students.sort((a,b)=>a.name.localeCompare(b.name));
+    document.getElementById('st-name').value = '';
+    updateBadges();
+    renderStudents();
+    renderScoreDropdowns();
+    toast(`✅ ${s.name} added!`);
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function renderStudents() {
+  const tb = document.getElementById('students-tbody');
+  document.getElementById('students-count').textContent = `${state.students.length} student${state.students.length!==1?'s':''}`;
+  if(!state.students.length) {
+    tb.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">👥</div>No students yet — add one above</div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = state.students.map(s => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px">${avatarHtml(s.name)}<strong>${s.name}</strong></div></td>
+      <td><span class="dept-badge dept-${s.dept}">${s.dept}</span></td>
+      <td style="color:var(--muted)">${fmtDate(s.createdAt)}</td>
+      <td><button class="btn btn-danger" onclick="deleteStudent('${s._id}','${s.name}')">✕ Remove</button></td>
+    </tr>`).join('');
+}
+
+async function deleteStudent(id, name) {
+  confirmModal(`Remove "${name}" and all their scores?`, async () => {
+    await fetch(`${API}/students/${id}`,{method:'DELETE'});
+    state.students = state.students.filter(s=>s._id!==id);
+    state.scores   = state.scores.filter(s=>s.student?._id!==id);
+    updateBadges(); renderStudents(); renderScoreDropdowns(); renderScores();
+    toast(`Removed ${name}`);
+  });
+}
+
+// ── COMPETITIONS ──
+async function addCompetition() {
+  const name     = document.getElementById('cp-name').value.trim();
+  const category = document.getElementById('cp-cat').value;
+  const date     = document.getElementById('cp-date').value;
+  if(!name) { toast('Please enter a competition name','error'); return; }
+  try {
+    const res = await fetch(`${API}/competitions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,category,date})});
+    if(!res.ok) throw new Error((await res.json()).error);
+    const c = await res.json();
+    state.competitions.push(c);
+    document.getElementById('cp-name').value = '';
+    updateBadges(); renderCompetitions(); renderScoreDropdowns(); renderScoresFilterComp();
+    toast(`✅ "${c.name}" added!`);
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function renderCompetitions() {
+  const tb = document.getElementById('comps-tbody');
+  document.getElementById('comps-count').textContent = `${state.competitions.length} competition${state.competitions.length!==1?'s':''}`;
+  if(!state.competitions.length) {
+    tb.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">🏆</div>No competitions yet</div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = state.competitions.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td><span class="cat-badge cat-${c.category}">${CAT_LABELS[c.category]||c.category}</span></td>
+      <td style="color:var(--muted)">${fmtDate(c.date||c.createdAt)}</td>
+      <td><button class="btn btn-danger" onclick="deleteCompetition('${c._id}','${c.name}')">✕ Remove</button></td>
+    </tr>`).join('');
+}
+
+async function deleteCompetition(id, name) {
+  confirmModal(`Remove "${name}" and all its scores?`, async () => {
+    await fetch(`${API}/competitions/${id}`,{method:'DELETE'});
+    state.competitions = state.competitions.filter(c=>c._id!==id);
+    state.scores       = state.scores.filter(s=>s.competition?._id!==id);
+    updateBadges(); renderCompetitions(); renderScoreDropdowns(); renderScoresFilterComp(); renderScores();
+    toast(`Removed "${name}"`);
+  });
+}
+
+// ── SCORE DROPDOWNS ──
+function renderScoreDropdowns() {
+  const ss = document.getElementById('sc-student');
+  const sc = document.getElementById('sc-comp');
+  ss.innerHTML = state.students.length
+    ? state.students.map(s=>`<option value="${s._id}">${s.name} (${s.dept})</option>`).join('')
+    : '<option disabled>No students yet</option>';
+  sc.innerHTML = state.competitions.length
+    ? state.competitions.map(c=>`<option value="${c._id}">${c.name} — ${CAT_LABELS[c.category]||c.category}</option>`).join('')
+    : '<option disabled>No competitions yet</option>';
+}
+
+function renderScoresFilterComp() {
+  const sel = document.getElementById('scores-filter-comp');
+  const val = sel.value;
+  sel.innerHTML = '<option value="">All Competitions</option>' +
+    state.competitions.map(c=>`<option value="${c._id}">${c.name}</option>`).join('');
+  sel.value = val;
+}
+
+// ── SCORES ──
+async function addScore() {
+  const studentId     = document.getElementById('sc-student').value;
+  const competitionId = document.getElementById('sc-comp').value;
+  const pts           = document.getElementById('sc-pts').value;
+  if(!studentId||!competitionId||pts===''){ toast('Fill in all fields','error'); return; }
+  const points = parseInt(pts);
+  if(isNaN(points)||points<0||points>100){ toast('Points must be 0–100','error'); return; }
+  try {
+    const res = await fetch(`${API}/scores`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({studentId,competitionId,points})});
+    if(!res.ok) throw new Error((await res.json()).error);
+    const sc = await res.json();
+    // Upsert in local state
+    const idx = state.scores.findIndex(s=>s.student?._id===studentId && s.competition?._id===competitionId);
+    if(idx>=0) state.scores[idx] = sc;
+    else state.scores.unshift(sc);
+    updateBadges(); renderScores();
+    document.getElementById('sc-pts').value = '';
+    toast(`✅ Score saved: ${sc.student?.name} — ${sc.competition?.name} — ${points} pts`);
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function renderScores() {
+  const tb     = document.getElementById('scores-tbody');
+  const fComp  = document.getElementById('scores-filter-comp').value;
+  const fDept  = document.getElementById('scores-filter-dept').value;
+  let filtered = state.scores.filter(s => {
+    if(fComp && s.competition?._id !== fComp) return false;
+    if(fDept && s.student?.dept !== fDept)    return false;
+    return true;
+  });
+  if(!filtered.length) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">📝</div>No scores recorded yet</div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = filtered.map(s => {
+    const barColor = s.competition?.category?.startsWith('ace') ? '#3b82f6' : '#ec4899';
+    return `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:8px">${avatarHtml(s.student?.name||'?',28)}<span style="font-weight:600">${s.student?.name||'—'}</span></div></td>
+      <td>${s.competition?.name||'—'}</td>
+      <td><span class="cat-badge cat-${s.competition?.category||''}">${CAT_LABELS[s.competition?.category]||'—'}</span></td>
+      <td>
+        <span class="pts-badge">${s.points}</span>
+        <div class="score-bar-wrap" style="max-width:80px"><div class="score-bar" style="width:${s.points}%;background:${barColor}"></div></div>
+      </td>
+      <td style="color:var(--muted);font-size:12px">${fmtDate(s.updatedAt||s.createdAt)}</td>
+      <td><button class="btn btn-danger" onclick="deleteScore('${s._id}')">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function deleteScore(id) {
+  confirmModal('Delete this score entry?', async () => {
+    await fetch(`${API}/scores/${id}`,{method:'DELETE'});
+    state.scores = state.scores.filter(s=>s._id!==id);
+    updateBadges(); renderScores();
+    toast('Score deleted');
+  });
+}
+
+// ── LEADERBOARD ──
+async function loadLeaderboard() {
+  try {
+    const data = await fetch(`${API}/leaderboard`).then(r=>r.json());
+
+    // Overall
+    const ob = document.getElementById('lb-overall');
+    if(!data.overall.length) {
+      ob.innerHTML = `<tr><td colspan="8"><div class="empty">No data yet</div></td></tr>`;
+    } else {
+      const maxTot = data.overall[0]?.total || 1;
+      ob.innerHTML = data.overall.map((row,i) => {
+        const rc = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+        return `<tr>
+          <td><span class="rank-num ${rc}">${medal}</span></td>
+          <td><div style="display:flex;align-items:center;gap:8px">${avatarHtml(row.student.name)}<strong>${row.student.name}</strong></div></td>
+          <td><span class="dept-badge dept-${row.student.dept}">${row.student.dept}</span></td>
+          <td style="color:#93c5fd">${row.cats.ace1  !=null ? row.cats.ace1  : '<span style="color:var(--muted2)">—</span>'}</td>
+          <td style="color:#67e8f9">${row.cats.ace2  !=null ? row.cats.ace2  : '<span style="color:var(--muted2)">—</span>'}</td>
+          <td style="color:#f9a8d4">${row.cats.arena1!=null ? row.cats.arena1: '<span style="color:var(--muted2)">—</span>'}</td>
+          <td style="color:#fdba74">${row.cats.arena2!=null ? row.cats.arena2: '<span style="color:var(--muted2)">—</span>'}</td>
+          <td><span class="pts-badge" style="font-size:22px">${row.total}</span>
+            <div class="score-bar-wrap" style="max-width:80px;margin-top:4px"><div class="score-bar" style="width:${Math.round(row.total/maxTot*100)}%;background:linear-gradient(to right,#a07520,var(--gold))"></div></div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // Per category
+    ['ace1','ace2','arena1','arena2'].forEach(cat => {
+      const rows = data.catLeaders[cat] || [];
+      const barColor = cat.startsWith('ace') ? '#3b82f6' : '#ec4899';
+      const el = document.getElementById('lb-'+cat);
+      if(!rows.length) {
+        el.innerHTML = `<tr><td colspan="3"><div class="empty">No scores yet</div></td></tr>`;
+        return;
+      }
+      const maxP = rows[0]?.points || 1;
+      el.innerHTML = rows.map((r,i) => {
+        const rc = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+        return `<tr>
+          <td><span class="rank-num ${rc}">${medal}</span></td>
+          <td><div style="display:flex;align-items:center;gap:8px">${avatarHtml(r.name)}<span style="font-weight:600">${r.name}</span></div></td>
+          <td><span class="pts-badge">${r.points}</span>
+            <div class="score-bar-wrap" style="max-width:70px;margin-top:3px"><div class="score-bar" style="width:${Math.round(r.points/maxP*100)}%;background:${barColor}"></div></div>
+          </td>
+        </tr>`;
+      }).join('');
+    });
+  } catch(e) { toast('Failed to load leaderboard','error'); }
+}
+
+// ── DASHBOARD ──
+function miniLeaderHtml(leaders, barColor) {
+  if(!leaders||!leaders.length) return `<div class="empty" style="padding:20px 0"><div class="empty-icon" style="font-size:24px">📊</div>No scores yet</div>`;
+  const maxP = leaders[0].points||1;
+  return leaders.slice(0,3).map((r,i)=>{
+    const rc = i===0?'rank-1':i===1?'rank-2':'rank-3';
+    const medal = ['🥇','🥈','🥉'][i];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(37,47,74,0.4)">
+      <span class="rank-num ${rc}" style="font-size:16px;width:24px;text-align:center">${medal}</span>
+      ${avatarHtml(r.name)}
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px">${r.name}</div>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${Math.round(r.points/maxP*100)}%;background:${barColor}"></div></div>
+      </div>
+      <span class="pts-badge" style="font-size:16px">${r.points}</span>
+    </div>`;
+  }).join('');
+}
+
+async function loadDashboard() {
+  try {
+    const data = await fetch(`${API}/leaderboard`).then(r=>r.json());
+    // Overall top 5
+    const ob = document.getElementById('dash-overall');
+    if(!data.overall.length) {
+      ob.innerHTML = `<div class="empty"><div class="empty-icon">🏆</div>No scores yet</div>`;
+    } else {
+      const maxT = data.overall[0]?.total||1;
+      ob.innerHTML = data.overall.slice(0,5).map((row,i)=>{
+        const rc = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(37,47,74,0.4)">
+          <span class="rank-num ${rc}" style="width:24px;text-align:center">${medal}</span>
+          ${avatarHtml(row.student.name)}
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:13px">${row.student.name}</div>
+            <div style="font-size:11px;color:var(--muted)">${row.student.dept}</div>
+            <div class="score-bar-wrap"><div class="score-bar" style="width:${Math.round(row.total/maxT*100)}%;background:linear-gradient(to right,#a07520,var(--gold))"></div></div>
+          </div>
+          <span class="pts-badge">${row.total}</span>
+        </div>`;
+      }).join('');
+    }
+    // Per category minis
+    document.getElementById('dash-ace1').innerHTML   = miniLeaderHtml(data.catLeaders.ace1,   '#3b82f6');
+    document.getElementById('dash-ace2').innerHTML   = miniLeaderHtml(data.catLeaders.ace2,   '#06b6d4');
+    document.getElementById('dash-arena1').innerHTML = miniLeaderHtml(data.catLeaders.arena1, '#ec4899');
+    document.getElementById('dash-arena2').innerHTML = miniLeaderHtml(data.catLeaders.arena2, '#f97316');
+  } catch(e) {}
+
+  // Recent scores
+  const rb = document.getElementById('dash-recent');
+  const recent = state.scores.slice(0,5);
+  if(!recent.length) {
+    rb.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>No scores yet</div>`;
+  } else {
+    rb.innerHTML = recent.map(s=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(37,47,74,0.4)">
+        ${avatarHtml(s.student?.name||'?',28)}
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:13px">${s.student?.name||'—'}</div>
+          <div style="font-size:11px;color:var(--muted)">${s.competition?.name||'—'}</div>
+        </div>
+        <span class="pts-badge" style="font-size:18px">${s.points}</span>
+      </div>`).join('');
+  }
+}
+
+// ── SET DEFAULT DATE ──
+document.getElementById('cp-date').value = new Date().toISOString().slice(0,10);
+
+// ── INIT ──
+loadAll();
+</script>
+</body>
+</html>
