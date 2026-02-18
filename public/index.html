@@ -802,6 +802,16 @@ tr:hover td { background: rgba(255,255,255,0.015); }
 </div>
 
 <script>
+  fetch('/auth/check', {
+  credentials: 'include'  // ← ADD THIS
+})
+  .then(r => r.json())
+  .then(data => {
+    if (!data.authenticated) {
+      window.location.href = '/';
+    }
+  })
+  .catch(() => window.location.href = '/');
 // ── STATE ──
 let state = { students: [], competitions: [], scores: [] };
 let confirmCb = null;
