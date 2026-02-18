@@ -369,10 +369,10 @@
 
 // ── CONSTANTS ──
 const CATEGORIES = [
-  { id:'ace1',   cls:'cat-ace1',   emoji:'🖥️', name:'Ramadan Code Quest',      dept:'ACE',   weeks:'Weeks 1 & 2  ·  Feb 18–19' },
-  { id:'ace2',   cls:'cat-ace2',   emoji:'⚡',  name:'Fast-Tech Firdaus',         dept:'ACE',   weeks:'Weeks 3 & 4  ·  Mar 4–5'  },
-  { id:'arena1', cls:'cat-arena1', emoji:'🎨', name:'Crescent Creative Studio',  dept:'ARENA', weeks:'Weeks 1 & 2  ·  Feb 18–19' },
-  { id:'arena2', cls:'cat-arena2', emoji:'🌟', name:'Digital Suhoor Designers',  dept:'ARENA', weeks:'Weeks 3 & 4  ·  Mar 4–5'  },
+  { id:'ace1',   cls:'cat-ace1',   emoji:'🖥️', name:'Ramadan Code Quest',      dept:'ACE',   weeks:'Weeks 1  ·  Feb 22–23' },
+  { id:'ace2',   cls:'cat-ace2',   emoji:'⚡',  name:'Fast-Tech Firdaus',         dept:'ACE',   weeks:'Weeks 2  ·  Mar 1–2'  },
+  { id:'arena1', cls:'cat-arena1', emoji:'🎨', name:'Crescent Creative Studio',  dept:'ARENA', weeks:'Weeks 3  ·  Mar 8–9' },
+  { id:'arena2', cls:'cat-arena2', emoji:'🌟', name:'Digital Suhoor Designers',  dept:'ARENA', weeks:'Weeks 4  ·  Mar 15–16'  },
 ];
 
 const COLORS = ['#3b82f6','#ec4899','#10b981','#f97316','#a855f7','#06b6d4','#eab308','#ef4444','#14b8a6','#f43f5e','#84cc16','#8b5cf6'];
@@ -403,7 +403,7 @@ async function fetchAndRender() {
     document.getElementById('stat-students').textContent = students.length;
     document.getElementById('stat-comps').textContent    = comps.length;
     document.getElementById('stat-scores').textContent   = counts.length;
-    const days = Math.max(0, Math.ceil((new Date('2026-03-18') - Date.now())/(86400000)));
+    const days = Math.max(0, Math.ceil((new Date('2026-03-22') - Date.now())/(86400000)));
     document.getElementById('stat-days').textContent = days;
     document.getElementById('last-time').textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
