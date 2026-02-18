@@ -517,6 +517,11 @@ tr:hover td { background: rgba(255,255,255,0.015); }
     <div class="topbar-actions">
       <div class="status-dot" id="conn-dot" style="background:var(--muted2)"></div>
       <div class="conn-label" id="conn-label">Connecting…</div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm" onclick="logout()" style="padding:6px 12px">🚪 Logout</button>
+        <div class="status-dot" id="conn-dot" style="background:var(--muted2)"></div>
+        <div class="conn-label" id="conn-label">Connecting…</div>
+      </div>
     </div>
   </div>
 
@@ -1146,6 +1151,11 @@ function miniLeaderHtml(leaders, barColor) {
       <span class="pts-badge" style="font-size:16px">${r.points}</span>
     </div>`;
   }).join('');
+}
+
+async function logout() {
+  await fetch('/auth/logout', { method: 'POST' });
+  window.location.href = '/';
 }
 
 async function loadDashboard() {
