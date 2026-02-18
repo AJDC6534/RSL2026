@@ -88,9 +88,90 @@ mongoose.connect(MONGO_URI)
       res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
 
-    app.get('/leaderboard.html', (req, res) => {
-      res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
-    });
+    // ── PUBLIC API ROUTES (no auth required) ──
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const { Student, Competition, Score } = require('./models');
+    
+    const catMeta = {
+      ace1:   { label: 'Ramadan Code Quest',       dept: 'ACE',   emoji: '🖥️'  },
+      ace2:   { label: 'Fast-Tech Firdaus',         dept: 'ACE',   emoji: '⚡'  },
+      arena1: { label: 'Crescent Creative Studio',  dept: 'ARENA', emoji: '🎨' },
+      arena2: { label: 'Digital Suhoor Designers',  dept: 'ARENA', emoji: '🌟' },
+    };
+
+    const scores = await Score.find()
+      .populate('student', 'name dept')
+      .populate('competition', 'name category');
+
+    const map = {};
+    for (const s of scores) {
+      const sid = s.student._id.toString();
+      const cat = s.competition.category;
+      if (!map[sid]) map[sid] = { student: s.student, cats: {} };
+      map[sid].cats[cat] = (map[sid].cats[cat] || 0) + s.points;
+    }
+
+    const rows = Object.values(map).map(({ student, cats }) => {
+      const total = Object.values(cats).reduce((a, b) => a + b, 0);
+      return { student, cats, total };
+    }).sort((a, b) => b.total - a.total);
+
+    const catLeaders = {};
+    for (const catId of Object.keys(catMeta)) {
+      const sorted = rows
+        .filter(r => r.cats[catId] != null)
+        .sort((a, b) => (b.cats[catId] || 0) - (a.cats[catId] || 0));
+      catLeaders[catId] = sorted.slice(0, 5).map((r, i) => ({
+        rank: i + 1,
+        studentId: r.student._id,
+        name: r.student.name,
+        dept: r.student.dept,
+        points: r.cats[catId] || 0,
+      }));
+    }
+
+    res.json({ overall: rows.slice(0, 10), catLeaders, catMeta });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/students', async (req, res) => {
+  try {
+    const { Student } = require('./models');
+    const students = await Student.find().sort({ name: 1 });
+    res.json(students);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/competitions', async (req, res) => {
+  try {
+    const { Competition } = require('./models');
+    const comps = await Competition.find().sort({ createdAt: 1 });
+    res.json(comps);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/scores', async (req, res) => {
+  try {
+    const { Score } = require('./models');
+    const scores = await Score.find()
+      .populate('student', 'name dept')
+      .populate('competition', 'name category')
+      .sort({ updatedAt: -1 });
+    res.json(scores);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── PROTECTED API ROUTES (admin only) ──
+app.use('/api', requireAuth, require('./routes/api'));
 
     // ── START SERVER ──
     app.listen(PORT, () => console.log(`🚀  Server running on port ${PORT}`));
