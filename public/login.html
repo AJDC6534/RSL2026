@@ -146,16 +146,10 @@ input:focus { border-color: var(--gold); }
 </div>
 
 <script>
-  fetch('/auth/check')
-  .then(r => r.json())
-  .then(data => {
-    if (!data.authenticated) {
-      window.location.href = '/';
-    }
-  })
-  .catch(() => window.location.href = '/');
 // Check if already logged in
-fetch('/auth/check')
+fetch('/auth/check', {
+  credentials: 'include'  // ← ADD THIS
+})
   .then(r => r.json())
   .then(data => {
     if (data.authenticated) {
@@ -173,6 +167,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const res = await fetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',  // ← ADD THIS
       body: JSON.stringify({ password })
     });
     
