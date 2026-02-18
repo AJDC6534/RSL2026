@@ -36,7 +36,7 @@ app.use('/assets', express.static(path.join(__dirname, 'public')));
 // ── AUTH ROUTES ──
 app.post('/auth/login', (req, res) => {
   const { password } = req.body;
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'aptech@126534';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'aptech_126534';
   
   if (password === ADMIN_PASSWORD) {
     req.session.authenticated = true;
