@@ -30,8 +30,8 @@ const requireAuth = (req, res, next) => {
   res.status(401).json({ error: 'Authentication required' });
 };
 
-// ── STATIC FILES ──
-app.use(express.static(path.join(__dirname, 'public')));
+// ── STATIC FILES (for leaderboard.html and other public assets) ──
+app.use('/assets', express.static(path.join(__dirname, 'public')));
 
 // ── AUTH ROUTES ──
 app.post('/auth/login', (req, res) => {
@@ -58,16 +58,18 @@ app.get('/auth/check', (req, res) => {
 // ── API ROUTES (PROTECTED) ──
 app.use('/api', requireAuth, require('./routes/api'));
 
-// ── SERVE ADMIN (check happens client-side) ──
+// ── ROUTES ──
+// Root - Login page (FIRST THING USERS SEE)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
+// Admin dashboard (protected)
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ── PUBLIC LEADERBOARD (no auth required) ──
+// Public leaderboard (no auth)
 app.get('/leaderboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
 });
