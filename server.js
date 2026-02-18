@@ -23,6 +23,8 @@ if (!MONGO_URI) {
 mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('✅  MongoDB connected');
+
+    app.set('trust proxy', 1);
     
     // ── SESSION (after MongoDB connection) ──
     app.use(session({
@@ -34,9 +36,10 @@ mongoose.connect(MONGO_URI)
         touchAfter: 24 * 3600 // lazy session update (24 hours)
       }),
       cookie: { 
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,  // ← Changed to always true (Render uses HTTPS)
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax'  // ← ADD THIS
       }
     }));
 
