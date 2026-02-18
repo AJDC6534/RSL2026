@@ -1164,7 +1164,10 @@ function miniLeaderHtml(leaders, barColor) {
 }
 
 async function logout() {
-  await fetch('/auth/logout', { method: 'POST' });
+  await fetch('/auth/logout', { 
+    method: 'POST',
+    credentials: 'include'  // ← ADD THIS
+  });
   window.location.href = '/';
 }
 
