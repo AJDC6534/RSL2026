@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const studentSchema = new mongoose.Schema({
   name:      { type: String, required: true, trim: true },
   dept:      { type: String, enum: ['ACE', 'ARENA'], required: true },
+  enrolledCompetitions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Competition' }],
   createdAt: { type: Date, default: Date.now },
 });
 const Student = mongoose.model('Student', studentSchema);
@@ -25,7 +26,7 @@ const Competition = mongoose.model('Competition', competitionSchema);
 const scoreSchema = new mongoose.Schema({
   student:     { type: mongoose.Schema.Types.ObjectId, ref: 'Student',     required: true },
   competition: { type: mongoose.Schema.Types.ObjectId, ref: 'Competition', required: true },
-  points:      { type: Number, required: true, min: 0, max: 100 },
+  points:      { type: Number, required: true, min: 0, max: 25 },
   createdAt:   { type: Date, default: Date.now },
   updatedAt:   { type: Date, default: Date.now },
 });
