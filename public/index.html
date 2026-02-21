@@ -319,6 +319,38 @@ tr:hover td { background: rgba(212,168,67,0.05); }
   color: var(--gold-l);
 }
 
+/* ── PLACEMENT BADGE ── */
+.placement-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.placement-1st {
+  background: rgba(240,201,106,0.15);
+  border: 1px solid rgba(240,201,106,0.4);
+  color: #f0c96a;
+}
+.placement-2nd {
+  background: rgba(147,197,253,0.12);
+  border: 1px solid rgba(147,197,253,0.3);
+  color: #93c5fd;
+}
+.placement-3rd {
+  background: rgba(200,168,122,0.15);
+  border: 1px solid rgba(200,168,122,0.4);
+  color: #c8a87a;
+}
+.placement-participant {
+  background: rgba(129,201,149,0.1);
+  border: 1px solid rgba(129,201,149,0.25);
+  color: #81c995;
+}
+
 /* ── AVATAR ── */
 .avatar {
   width: 36px; height: 36px;
@@ -441,6 +473,87 @@ tr:hover td { background: rgba(212,168,67,0.05); }
 }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
+/* ── ENROLLMENT CHIPS ── */
+.enrollment-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.enrollment-chip {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+/* ── COMPETITION CHECKLIST (inside modal) ── */
+.comp-checklist {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.comp-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.comp-check-item:hover { border-color: var(--border2); }
+.comp-check-item.checked {
+  border-color: var(--gold-d);
+  background: rgba(212,168,67,0.08);
+}
+.comp-check-item input[type="checkbox"] {
+  width: 16px; height: 16px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+.comp-check-name { font-size: 13px; font-weight: 600; }
+.comp-check-cat { font-size: 10px; color: var(--muted); }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.filter-bar select {
+  padding: 6px 10px;
+  font-size: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  width: auto;
+  min-width: 100px;
+}
+
+/* ── GRADING INFO ── */
+.grading-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.grading-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -517,7 +630,6 @@ tr:hover td { background: rgba(212,168,67,0.05); }
   
   .topbar-actions {
     width: 100%;
-    
   }
   
   .content { padding: 20px 16px; }
@@ -557,7 +669,7 @@ tr:hover td { background: rgba(212,168,67,0.05); }
       <span class="nav-badge" id="badge-comps">0</span>
     </a>
     <a class="nav-item" onclick="showPage('scores',this)">
-      <span class="nav-icon">⚡</span><span>Enter Scores</span>
+      <span class="nav-icon">⚡</span><span>Grading</span>
     </a>
 
     <div class="nav-section">Results</div>
@@ -586,8 +698,8 @@ tr:hover td { background: rgba(212,168,67,0.05); }
         <div class="status-dot" id="conn-dot" style="background:var(--muted2)"></div>
         <div class="conn-label" id="conn-label">Connecting…</div>
       </div>
-      </div>
     </div>
+  </div>
 
   <div class="content">
 
@@ -665,7 +777,16 @@ tr:hover td { background: rgba(212,168,67,0.05); }
       <div class="card">
         <div class="card-header">
           <div class="card-title">👥 All Students</div>
-          <span style="font-size:12px;color:var(--muted)" id="students-count"></span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:12px;color:var(--muted)" id="students-count"></span>
+            <div class="filter-bar">
+              <select id="students-filter-dept" onchange="renderStudents()">
+                <option value="">All Programmes</option>
+                <option value="ACE">ACE</option>
+                <option value="ARENA">ARENA</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="card-body" style="padding:0">
           <div class="table-wrap">
@@ -674,12 +795,13 @@ tr:hover td { background: rgba(212,168,67,0.05); }
                 <tr>
                   <th>Student</th>
                   <th>Programme</th>
+                  <th>Enrolled Competitions</th>
                   <th>Registered</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody id="students-tbody">
-                <tr><td colspan="4"><div class="empty"><div class="empty-icon">👥</div>No students yet</div></td></tr>
+                <tr><td colspan="5"><div class="empty"><div class="empty-icon">👥</div>No students yet</div></td></tr>
               </tbody>
             </table>
           </div>
@@ -743,31 +865,31 @@ tr:hover td { background: rgba(212,168,67,0.05); }
       </div>
     </div>
 
-    <!-- ── PAGE: SCORES ── -->
+    <!-- ── PAGE: SCORES (GRADING) ── -->
     <div id="page-scores" class="page">
       <div class="card" style="margin-bottom:20px">
-        <div class="card-header"><div class="card-title">⚡ Enter / Update Score</div></div>
+        <div class="card-header">
+          <div class="card-title">⚡ Grade Competition</div>
+        </div>
         <div class="card-body">
-          <div class="form-row">
-            <div class="form-group" style="flex:2">
-              <label>Student</label>
-              <select id="sc-student"></select>
-            </div>
+          <div class="form-row" style="margin-bottom:12px">
             <div class="form-group" style="flex:2">
               <label>Competition</label>
-              <select id="sc-comp"></select>
-            </div>
-            <div class="form-group">
-              <label>Points (0–100)</label>
-              <input id="sc-pts" type="number" min="0" max="100" placeholder="e.g. 85">
-            </div>
-            <div class="form-group" style="flex:0">
-              <label>&nbsp;</label>
-              <button class="btn btn-primary" onclick="addScore()">✦ Save Score</button>
+              <select id="sc-comp" onchange="onGradeCompChange()"></select>
             </div>
           </div>
-          <div style="font-size:12px;color:var(--muted);margin-top:10px">
-            💡 Saving a score for the same student + competition will <strong>update</strong> the existing score.
+
+          <!-- Grading legend -->
+          <div class="grading-legend" style="margin-bottom:16px">
+            <div class="grading-legend-item"><span class="placement-badge placement-1st">🥇 1st</span> <span>= 25 pts</span></div>
+            <div class="grading-legend-item"><span class="placement-badge placement-2nd">🥈 2nd</span> <span>= 20 pts</span></div>
+            <div class="grading-legend-item"><span class="placement-badge placement-3rd">🥉 3rd</span> <span>= 15 pts</span></div>
+            <div class="grading-legend-item"><span class="placement-badge placement-participant">✦ Participant</span> <span>= 10 pts</span></div>
+          </div>
+
+          <!-- Enrolled students for selected competition -->
+          <div id="grading-panel">
+            <div class="empty" style="padding:20px 0"><div class="empty-icon" style="font-size:24px">🏆</div>Select a competition above to grade enrolled students</div>
           </div>
         </div>
       </div>
@@ -794,13 +916,14 @@ tr:hover td { background: rgba(212,168,67,0.05); }
                   <th>Student</th>
                   <th>Competition</th>
                   <th>Category</th>
+                  <th>Placement</th>
                   <th>Points</th>
                   <th>Updated</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody id="scores-tbody">
-                <tr><td colspan="6"><div class="empty"><div class="empty-icon">📝</div>No scores yet</div></td></tr>
+                <tr><td colspan="7"><div class="empty"><div class="empty-icon">📝</div>No scores yet</div></td></tr>
               </tbody>
             </table>
           </div>
@@ -865,10 +988,23 @@ tr:hover td { background: rgba(212,168,67,0.05); }
   </div>
 </div>
 
+<!-- ── ENROLL MODAL ── -->
+<div class="modal-overlay" id="enroll-modal">
+  <div class="modal">
+    <div class="modal-title" id="enroll-modal-title">📋 Manage Enrollments</div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:14px">Select which competitions this student is participating in:</div>
+    <div class="comp-checklist" id="enroll-checklist"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeEnroll()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEnrollments()">✦ Save Enrollments</button>
+    </div>
+  </div>
+</div>
+
 <script>
   fetch('/auth/check', {
-  credentials: 'include'  // ← ADD THIS
-})
+    credentials: 'include'
+  })
   .then(r => r.json())
   .then(data => {
     if (!data.authenticated) {
@@ -876,9 +1012,22 @@ tr:hover td { background: rgba(212,168,67,0.05); }
     }
   })
   .catch(() => window.location.href = '/');
+
 // ── STATE ──
 let state = { students: [], competitions: [], scores: [] };
 let confirmCb = null;
+let enrollStudentId = null;
+
+// ── PLACEMENT → POINTS MAPPING ──
+const PLACEMENT_PTS = { '1st': 25, '2nd': 20, '3rd': 15, 'participant': 10 };
+const PTS_PLACEMENT = { 25: '1st', 20: '2nd', 15: '3rd', 10: 'participant' };
+
+function placementLabel(pts) {
+  if (pts === 25) return '<span class="placement-badge placement-1st">🥇 1st Place</span>';
+  if (pts === 20) return '<span class="placement-badge placement-2nd">🥈 2nd Place</span>';
+  if (pts === 15) return '<span class="placement-badge placement-3rd">🥉 3rd Place</span>';
+  return '<span class="placement-badge placement-participant">✦ Participant</span>';
+}
 
 // ── API BASE ──
 const API = '/api';
@@ -903,12 +1052,68 @@ function closeConfirm() {
   document.getElementById('confirm-modal').classList.remove('open');
 }
 
+// ── ENROLL MODAL ──
+function openEnroll(studentId) {
+  enrollStudentId = studentId;
+  const student = state.students.find(s => s._id === studentId);
+  if (!student) return;
+  
+  document.getElementById('enroll-modal-title').textContent = `📋 Enrollments — ${student.name}`;
+  
+  const enrolled = student.enrolledCompetitions || [];
+  const checklist = document.getElementById('enroll-checklist');
+  
+  if (!state.competitions.length) {
+    checklist.innerHTML = '<div class="empty" style="padding:20px 0">No competitions created yet. Add competitions first.</div>';
+  } else {
+    checklist.innerHTML = state.competitions.map(c => {
+      const isChecked = enrolled.includes(c._id);
+      return `
+        <label class="comp-check-item ${isChecked ? 'checked' : ''}" onclick="this.classList.toggle('checked')">
+          <input type="checkbox" value="${c._id}" ${isChecked ? 'checked' : ''}>
+          <div>
+            <div class="comp-check-name">${c.name}</div>
+            <div class="comp-check-cat"><span class="cat-badge cat-${c.category}" style="font-size:9px;padding:1px 6px">${CAT_LABELS[c.category] || c.category}</span></div>
+          </div>
+        </label>`;
+    }).join('');
+  }
+  
+  document.getElementById('enroll-modal').classList.add('open');
+}
+function closeEnroll() {
+  document.getElementById('enroll-modal').classList.remove('open');
+  enrollStudentId = null;
+}
+async function saveEnrollments() {
+  if (!enrollStudentId) return;
+  const checkboxes = document.querySelectorAll('#enroll-checklist input[type="checkbox"]');
+  const compIds = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+  
+  try {
+    const res = await fetch(`${API}/students/${enrollStudentId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enrolledCompetitions: compIds })
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    const updated = await res.json();
+    const idx = state.students.findIndex(s => s._id === enrollStudentId);
+    if (idx >= 0) state.students[idx] = updated;
+    renderStudents();
+    closeEnroll();
+    toast(`✅ Enrollments updated!`);
+  } catch(e) {
+    toast(e.message, 'error');
+  }
+}
+
 // ── PAGE NAV ──
 const pageMeta = {
   dashboard:    { title:'Dashboard',    sub:'Live overview of all standings' },
   students:     { title:'Students',     sub:'Add and manage registered students' },
   competitions: { title:'Competitions', sub:'Define competitions in each category' },
-  scores:       { title:'Enter Scores', sub:'Record and update student points' },
+  scores:       { title:'Grading',      sub:'Assign placements and record student points' },
   leaderboard:  { title:'Leaderboard',  sub:'Full standings across all categories' },
 };
 function showPage(id, el) {
@@ -921,6 +1126,7 @@ function showPage(id, el) {
   document.getElementById('topbar-sub').textContent = m.sub||'';
   if(id==='leaderboard') loadLeaderboard();
   if(id==='dashboard')   loadDashboard();
+  if(id==='scores')      { renderScoreDropdowns(); onGradeCompChange(); }
 }
 
 // ── HELPERS ──
@@ -1006,18 +1212,48 @@ async function addStudent() {
 
 function renderStudents() {
   const tb = document.getElementById('students-tbody');
-  document.getElementById('students-count').textContent = `${state.students.length} student${state.students.length!==1?'s':''}`;
-  if(!state.students.length) {
-    tb.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">👥</div>No students yet — add one above</div></td></tr>`;
+  const fDept = document.getElementById('students-filter-dept').value;
+  
+  let filtered = state.students;
+  if (fDept) {
+    filtered = filtered.filter(s => s.dept === fDept);
+  }
+  
+  document.getElementById('students-count').textContent = `${filtered.length} of ${state.students.length} student${state.students.length!==1?'s':''}`;
+  
+  if(!filtered.length) {
+    const msg = fDept ? `No ${fDept} students found` : 'No students yet — add one above';
+    tb.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">👥</div>${msg}</div></td></tr>`;
     return;
   }
-  tb.innerHTML = state.students.map(s => `
+  tb.innerHTML = filtered.map(s => {
+    // Build enrollment chips
+    const enrolled = s.enrolledCompetitions || [];
+    let enrollChips = '';
+    if (enrolled.length > 0) {
+      enrollChips = enrolled.map(cId => {
+        const comp = state.competitions.find(c => c._id === cId);
+        if (!comp) return '';
+        return `<span class="enrollment-chip cat-${comp.category}">${comp.name}</span>`;
+      }).filter(Boolean).join('');
+    } else {
+      enrollChips = '<span style="font-size:11px;color:var(--muted2);font-style:italic">Not enrolled yet</span>';
+    }
+    
+    return `
     <tr>
       <td><div style="display:flex;align-items:center;gap:10px">${avatarHtml(s.name)}<strong>${s.name}</strong></div></td>
       <td><span class="dept-badge dept-${s.dept}">${s.dept}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <div class="enrollment-chips">${enrollChips}</div>
+          <button class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:10px" onclick="openEnroll('${s._id}')">✏️ Edit</button>
+        </div>
+      </td>
       <td style="color:var(--muted)">${fmtDate(s.createdAt)}</td>
       <td><button class="btn btn-danger" onclick="deleteStudent('${s._id}','${s.name}')">✕ Remove</button></td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 }
 
 async function deleteStudent(id, name) {
@@ -1068,6 +1304,12 @@ async function deleteCompetition(id, name) {
     await fetch(`${API}/competitions/${id}`,{method:'DELETE'});
     state.competitions = state.competitions.filter(c=>c._id!==id);
     state.scores       = state.scores.filter(s=>s.competition?._id!==id);
+    // Also remove from student enrollments locally
+    state.students.forEach(s => {
+      if (s.enrolledCompetitions) {
+        s.enrolledCompetitions = s.enrolledCompetitions.filter(cId => cId !== id);
+      }
+    });
     updateBadges(); renderCompetitions(); renderScoreDropdowns(); renderScoresFilterComp(); renderScores();
     toast(`Removed "${name}"`);
   });
@@ -1075,13 +1317,9 @@ async function deleteCompetition(id, name) {
 
 // ── SCORE DROPDOWNS ──
 function renderScoreDropdowns() {
-  const ss = document.getElementById('sc-student');
   const sc = document.getElementById('sc-comp');
-  ss.innerHTML = state.students.length
-    ? state.students.map(s=>`<option value="${s._id}">${s.name} (${s.dept})</option>`).join('')
-    : '<option disabled>No students yet</option>';
   sc.innerHTML = state.competitions.length
-    ? state.competitions.map(c=>`<option value="${c._id}">${c.name} — ${CAT_LABELS[c.category]||c.category}</option>`).join('')
+    ? '<option value="">— Select Competition —</option>' + state.competitions.map(c=>`<option value="${c._id}">${c.name} — ${CAT_LABELS[c.category]||c.category}</option>`).join('')
     : '<option disabled>No competitions yet</option>';
 }
 
@@ -1093,28 +1331,121 @@ function renderScoresFilterComp() {
   sel.value = val;
 }
 
-// ── SCORES ──
-async function addScore() {
-  const studentId     = document.getElementById('sc-student').value;
-  const competitionId = document.getElementById('sc-comp').value;
-  const pts           = document.getElementById('sc-pts').value;
-  if(!studentId||!competitionId||pts===''){ toast('Fill in all fields','error'); return; }
-  const points = parseInt(pts);
-  if(isNaN(points)||points<0||points>100){ toast('Points must be 0–100','error'); return; }
-  try {
-    const res = await fetch(`${API}/scores`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({studentId,competitionId,points})});
-    if(!res.ok) throw new Error((await res.json()).error);
-    const sc = await res.json();
-    // Upsert in local state
-    const idx = state.scores.findIndex(s=>s.student?._id===studentId && s.competition?._id===competitionId);
-    if(idx>=0) state.scores[idx] = sc;
-    else state.scores.unshift(sc);
-    updateBadges(); renderScores();
-    document.getElementById('sc-pts').value = '';
-    toast(`✅ Score saved: ${sc.student?.name} — ${sc.competition?.name} — ${points} pts`);
-  } catch(e) { toast(e.message,'error'); }
+// ── GRADING PANEL ──
+function onGradeCompChange() {
+  const compId = document.getElementById('sc-comp').value;
+  const panel = document.getElementById('grading-panel');
+  
+  if (!compId) {
+    panel.innerHTML = '<div class="empty" style="padding:20px 0"><div class="empty-icon" style="font-size:24px">🏆</div>Select a competition above to grade enrolled students</div>';
+    return;
+  }
+  
+  const comp = state.competitions.find(c => c._id === compId);
+  if (!comp) return;
+  
+  // Find students enrolled in this competition
+  const enrolledStudents = state.students.filter(s => 
+    s.enrolledCompetitions && s.enrolledCompetitions.includes(compId)
+  );
+  
+  if (!enrolledStudents.length) {
+    panel.innerHTML = `<div class="empty" style="padding:20px 0"><div class="empty-icon" style="font-size:24px">👥</div>No students enrolled in this competition yet.<br><span style="font-size:12px">Go to Students → Edit enrollments to add students.</span></div>`;
+    return;
+  }
+  
+  // Build grading rows
+  let html = '<div style="display:flex;flex-direction:column;gap:8px">';
+  enrolledStudents.forEach(s => {
+    // Check if already scored
+    const existing = state.scores.find(sc => sc.student?._id === s._id && sc.competition?._id === compId);
+    const currentPts = existing ? existing.points : '';
+    const currentPlacement = currentPts !== '' ? (PTS_PLACEMENT[currentPts] || 'participant') : '';
+    
+    html += `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border-radius:10px;border:1px solid var(--border)">
+        ${avatarHtml(s.name, 32)}
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px">${s.name}</div>
+          <span class="dept-badge dept-${s.dept}" style="font-size:9px">${s.dept}</span>
+        </div>
+        <select id="grade-${s._id}" style="width:180px;padding:8px 12px;font-size:13px;font-weight:600" onchange="onPlacementSelect(this)">
+          <option value="">— Select —</option>
+          <option value="1st" ${currentPlacement==='1st'?'selected':''}>🥇 1st Place (25 pts)</option>
+          <option value="2nd" ${currentPlacement==='2nd'?'selected':''}>🥈 2nd Place (20 pts)</option>
+          <option value="3rd" ${currentPlacement==='3rd'?'selected':''}>🥉 3rd Place (15 pts)</option>
+          <option value="participant" ${currentPlacement==='participant'?'selected':''}>✦ Participant (10 pts)</option>
+        </select>
+        ${existing ? '<span style="font-size:10px;color:var(--gold);font-weight:700">SCORED</span>' : ''}
+      </div>`;
+  });
+  
+  html += `</div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="assignAllParticipant('${compId}')">Set All as Participant</button>
+      <button class="btn btn-primary" onclick="saveAllGrades('${compId}')">✦ Save All Grades</button>
+    </div>`;
+  
+  panel.innerHTML = html;
 }
 
+function onPlacementSelect(sel) {
+  // Visual feedback
+  sel.style.borderColor = sel.value ? 'var(--gold-d)' : 'var(--border2)';
+}
+
+function assignAllParticipant(compId) {
+  const enrolledStudents = state.students.filter(s => 
+    s.enrolledCompetitions && s.enrolledCompetitions.includes(compId)
+  );
+  enrolledStudents.forEach(s => {
+    const sel = document.getElementById(`grade-${s._id}`);
+    if (sel && !sel.value) sel.value = 'participant';
+  });
+}
+
+async function saveAllGrades(compId) {
+  const enrolledStudents = state.students.filter(s => 
+    s.enrolledCompetitions && s.enrolledCompetitions.includes(compId)
+  );
+  
+  let saved = 0;
+  let errors = 0;
+  
+  for (const s of enrolledStudents) {
+    const sel = document.getElementById(`grade-${s._id}`);
+    if (!sel || !sel.value) continue;
+    
+    const points = PLACEMENT_PTS[sel.value];
+    if (points === undefined) continue;
+    
+    try {
+      const res = await fetch(`${API}/scores`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: s._id, competitionId: compId, points })
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+      const sc = await res.json();
+      // Upsert in local state
+      const idx = state.scores.findIndex(x => x.student?._id === s._id && x.competition?._id === compId);
+      if (idx >= 0) state.scores[idx] = sc;
+      else state.scores.unshift(sc);
+      saved++;
+    } catch(e) {
+      errors++;
+    }
+  }
+  
+  updateBadges();
+  renderScores();
+  onGradeCompChange(); // refresh panel to show SCORED badges
+  
+  if (saved > 0) toast(`✅ ${saved} grade${saved!==1?'s':''} saved!`);
+  if (errors > 0) toast(`${errors} error${errors!==1?'s':''} occurred`, 'error');
+}
+
+// ── SCORES TABLE ──
 function renderScores() {
   const tb     = document.getElementById('scores-tbody');
   const fComp  = document.getElementById('scores-filter-comp').value;
@@ -1125,7 +1456,7 @@ function renderScores() {
     return true;
   });
   if(!filtered.length) {
-    tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">📝</div>No scores recorded yet</div></td></tr>`;
+    tb.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">📝</div>No scores recorded yet</div></td></tr>`;
     return;
   }
   tb.innerHTML = filtered.map(s => {
@@ -1135,9 +1466,10 @@ function renderScores() {
       <td><div style="display:flex;align-items:center;gap:8px">${avatarHtml(s.student?.name||'?',28)}<span style="font-weight:600">${s.student?.name||'—'}</span></div></td>
       <td>${s.competition?.name||'—'}</td>
       <td><span class="cat-badge cat-${s.competition?.category||''}">${CAT_LABELS[s.competition?.category]||'—'}</span></td>
+      <td>${placementLabel(s.points)}</td>
       <td>
         <span class="pts-badge">${s.points}</span>
-        <div class="score-bar-wrap" style="max-width:80px"><div class="score-bar" style="width:${s.points}%;background:${barColor}"></div></div>
+        <div class="score-bar-wrap" style="max-width:80px"><div class="score-bar" style="width:${s.points/25*100}%;background:${barColor}"></div></div>
       </td>
       <td style="color:var(--muted);font-size:12px">${fmtDate(s.updatedAt||s.createdAt)}</td>
       <td><button class="btn btn-danger" onclick="deleteScore('${s._id}')">✕</button></td>
@@ -1230,7 +1562,7 @@ function miniLeaderHtml(leaders, barColor) {
 async function logout() {
   await fetch('/auth/logout', { 
     method: 'POST',
-    credentials: 'include'  // ← ADD THIS
+    credentials: 'include'
   });
   window.location.href = '/';
 }
@@ -1279,6 +1611,7 @@ async function loadDashboard() {
           <div style="font-weight:600;font-size:13px">${s.student?.name||'—'}</div>
           <div style="font-size:11px;color:var(--muted)">${s.competition?.name||'—'}</div>
         </div>
+        ${placementLabel(s.points)}
         <span class="pts-badge" style="font-size:18px">${s.points}</span>
       </div>`).join('');
   }
