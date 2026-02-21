@@ -144,4 +144,30 @@ router.get('/leaderboard', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+router.post('/scores', async (req, res) => {
+  try {
+    const { studentId, competitionId, points } = req.body;
+    if (!studentId || !competitionId || points == null)
+      return res.status(400).json({ error: 'studentId, competitionId, points required' });
+    if (points < 0 || points > 25)
+      return res.status(400).json({ error: 'Points must be between 0 and 25' });
+
+    const score = await Score.findOneAndUpdate(
+      { student: studentId, competition: competitionId },
+      { points, updatedAt: new Date() },
+      { upsert: true, new: true }
+    ).populate('student', 'name dept').populate('competition', 'name category');
+
+    res.json(score);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.delete('/scores/:id', async (req, res) => {
+  try {
+    await Score.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+
 module.exports = router;
