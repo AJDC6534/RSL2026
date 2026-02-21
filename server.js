@@ -159,6 +159,29 @@ mongoose.connect(MONGO_URI)
       }
     });
 
+    // ── UPDATE STUDENT (enrollments) - protected ──
+    app.put('/api/students/:id', requireAuth, async (req, res) => {
+      try {
+        const { Student } = require('./models');
+        const update = {};
+        if (req.body.name) update.name = req.body.name;
+        if (req.body.dept) update.dept = req.body.dept;
+        if (req.body.enrolledCompetitions !== undefined) {
+          update.enrolledCompetitions = req.body.enrolledCompetitions;
+        }
+        const student = await Student.findByIdAndUpdate(
+          req.params.id,
+          update,
+          { new: true }
+        );
+        if (!student) return res.status(404).json({ error: 'Student not found' });
+        res.json(student);
+      } catch (e) { res.status(500).json({ error: e.message }); }
+    });
+
+    // ── PROTECTED API ROUTES (admin only - requires auth) ──
+    app.use('/api', requireAuth, require('./routes/api'));
+
     // ── PROTECTED API ROUTES (admin only - requires auth) ──
     app.use('/api', requireAuth, require('./routes/api'));
 
