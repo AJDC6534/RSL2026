@@ -59,6 +59,10 @@ router.delete('/competitions/:id', async (req, res) => {
 // ─────────────────────────────────────
 // SCORES
 // ─────────────────────────────────────
+router.get('/scores.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'scores.html'));
+});
+
 router.get('/scores', async (req, res) => {
   try {
     const scores = await Score.find()
