@@ -111,7 +111,7 @@ mongoose.connect(MONGO_URI)
           const sorted = rows
             .filter(r => r.cats[catId] != null)
             .sort((a, b) => (b.cats[catId] || 0) - (a.cats[catId] || 0));
-          catLeaders[catId] = sorted.slice(0, 5).map((r, i) => ({
+          catLeaders[catId] = sorted.map((r, i) => ({
             rank: i + 1,
             studentId: r.student._id,
             name: r.student.name,
@@ -120,7 +120,7 @@ mongoose.connect(MONGO_URI)
           }));
         }
 
-        res.json({ overall: rows.slice(0, 10), catLeaders, catMeta });
+        res.json({ overall: rows, catLeaders, catMeta });
       } catch (e) {
         res.status(500).json({ error: e.message });
       }
