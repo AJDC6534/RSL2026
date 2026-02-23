@@ -54,35 +54,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpolygon points='30,2 58,18 58,42 30,58 2,42 2,18' fill='none' stroke='%23d4a843' stroke-width='0.5'/%3E%3Cpolygon points='30,12 48,22 48,38 30,48 12,38 12,22' fill='none' stroke='%23d4a843' stroke-width='0.5'/%3E%3C/svg%3E");
   }
 
-  /* ── ADMIN LINK ── */
-  .admin-link {
-    position: fixed;
-    top: 16px; right: 20px;
-    z-index: 100;
-    font-family: 'Nunito', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 7px 16px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: rgba(14,17,32,0.8);
-    color: var(--muted);
-    cursor: pointer;
-    text-decoration: none;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .admin-link:hover {
-    border-color: var(--gold-d);
-    color: var(--gold-l);
-    background: rgba(212,168,67,0.08);
-  }
-
+ 
   /* ── WRAPPER ── */
   .wrapper { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:0 24px 80px; }
 
@@ -386,7 +358,6 @@
 
 <div class="stars" id="stars"></div>
 <div class="geo-bg"></div>
-<a class="admin-link" href="/admin">🔒 Admin</a>
 <div class="wrapper">
 
   <!-- HEADER -->
