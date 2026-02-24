@@ -106,18 +106,38 @@ mongoose.connect(MONGO_URI)
           return { student, cats, total };
         }).sort((a, b) => b.total - a.total);
 
+        // Assign tie-aware ranks to overall
+        let overallRank = 1;
+        rows.forEach((row, i) => {
+          if (i > 0 && row.total === rows[i - 1].total) {
+            row.rank = rows[i - 1].rank; // same rank as previous
+          } else {
+            row.rank = i + 1;
+          }
+        });
+
         const catLeaders = {};
         for (const catId of Object.keys(catMeta)) {
           const sorted = rows
             .filter(r => r.cats[catId] != null)
             .sort((a, b) => (b.cats[catId] || 0) - (a.cats[catId] || 0));
-          catLeaders[catId] = sorted.map((r, i) => ({
-            rank: i + 1,
-            studentId: r.student._id,
-            name: r.student.name,
-            dept: r.student.dept,
-            points: r.cats[catId] || 0,
-          }));
+
+          // Assign tie-aware ranks per category
+          catLeaders[catId] = sorted.map((r, i, arr) => {
+            let rank;
+            if (i > 0 && (r.cats[catId] || 0) === (arr[i - 1].cats[catId] || 0)) {
+              rank = catLeaders[catId][i - 1].rank; // same rank as previous
+            } else {
+              rank = i + 1;
+            }
+            return {
+              rank,
+              studentId: r.student._id,
+              name: r.student.name,
+              dept: r.student.dept,
+              points: r.cats[catId] || 0,
+            };
+          });
         }
 
         res.json({ overall: rows, catLeaders, catMeta });
@@ -125,7 +145,6 @@ mongoose.connect(MONGO_URI)
         res.status(500).json({ error: e.message });
       }
     });
-
     app.get('/api/students', async (req, res) => {
       try {
         const { Student } = require('./models');
