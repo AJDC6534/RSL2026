@@ -107,10 +107,9 @@ mongoose.connect(MONGO_URI)
         }).sort((a, b) => b.total - a.total);
 
         // Assign tie-aware ranks to overall
-        let overallRank = 1;
         rows.forEach((row, i) => {
           if (i > 0 && row.total === rows[i - 1].total) {
-            row.rank = rows[i - 1].rank; // same rank as previous
+            row.rank = rows[i - 1].rank;
           } else {
             row.rank = i + 1;
           }
@@ -122,22 +121,26 @@ mongoose.connect(MONGO_URI)
             .filter(r => r.cats[catId] != null)
             .sort((a, b) => (b.cats[catId] || 0) - (a.cats[catId] || 0));
 
-          // Assign tie-aware ranks per category
-          catLeaders[catId] = sorted.map((r, i, arr) => {
+          // Build array with tie-aware ranks using a loop (not .map)
+          const leaders = [];
+          for (let i = 0; i < sorted.length; i++) {
+            const r = sorted[i];
+            const pts = r.cats[catId] || 0;
             let rank;
-            if (i > 0 && (r.cats[catId] || 0) === (arr[i - 1].cats[catId] || 0)) {
-              rank = catLeaders[catId][i - 1].rank; // same rank as previous
+            if (i > 0 && pts === leaders[i - 1].points) {
+              rank = leaders[i - 1].rank; // same rank as previous
             } else {
               rank = i + 1;
             }
-            return {
+            leaders.push({
               rank,
               studentId: r.student._id,
               name: r.student.name,
               dept: r.student.dept,
-              points: r.cats[catId] || 0,
-            };
-          });
+              points: pts,
+            });
+          }
+          catLeaders[catId] = leaders;
         }
 
         res.json({ overall: rows, catLeaders, catMeta });
@@ -145,6 +148,7 @@ mongoose.connect(MONGO_URI)
         res.status(500).json({ error: e.message });
       }
     });
+
     app.get('/api/students', async (req, res) => {
       try {
         const { Student } = require('./models');
@@ -197,9 +201,6 @@ mongoose.connect(MONGO_URI)
         res.json(student);
       } catch (e) { res.status(500).json({ error: e.message }); }
     });
-
-    // ── PROTECTED API ROUTES (admin only - requires auth) ──
-    app.use('/api', requireAuth, require('./routes/api'));
 
     // ── PROTECTED API ROUTES (admin only - requires auth) ──
     app.use('/api', requireAuth, require('./routes/api'));
