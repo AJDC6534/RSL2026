@@ -217,7 +217,15 @@ mongoose.connect(MONGO_URI)
     app.get('/leaderboard.html', (req, res) => {
       res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
     });
-
+    
+    app.get('/scores.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'scores.html'));
+    });
+    
+    app.get('/winners.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'scores.html'));
+    });
+    
     // ── START SERVER ──
     app.listen(PORT, () => console.log(`🚀  Server running on port ${PORT}`));
   })
