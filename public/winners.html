@@ -397,6 +397,61 @@
     padding: 16px 0; color: var(--muted2); font-size: 13px; font-style: italic;
   }
 
+  /* top-3 list inside each category card */
+  .top3-list { display: flex; flex-direction: column; gap: 0; }
+
+  .top3-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid rgba(45,90,63,0.25);
+  }
+  .top3-row:last-child { border-bottom: none; }
+
+  .top3-rank {
+    font-family: 'Cinzel', serif; font-size: 20px;
+    width: 32px; text-align: center; flex-shrink: 0; line-height: 1;
+  }
+
+  .top3-avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-family: 'Cinzel', serif; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, var(--c1, #3b82f6), var(--c2, #06b6d4));
+  }
+
+  .top3-info { flex: 1; min-width: 0; }
+  .top3-name {
+    font-family: 'Cinzel', serif; font-weight: 700; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .top3-name.rank1 { font-size: 15px; }
+  .top3-name.rank2 { font-size: 14px; }
+  .top3-name.rank3 { font-size: 13px; color: var(--muted); }
+
+  .top3-dept-pill {
+    font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 100px; display: inline-block; margin-top: 3px;
+  }
+  .top3-dept-pill.ACE   { background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.3); color:#93c5fd; }
+  .top3-dept-pill.ARENA { background:rgba(236,72,153,.12); border:1px solid rgba(236,72,153,.3); color:#f9a8d4; }
+
+  .top3-score-wrap { text-align: right; flex-shrink: 0; }
+  .top3-score {
+    font-family: 'Cinzel', serif; font-weight: 900; line-height: 1;
+    background: linear-gradient(to bottom, var(--c1, #3b82f6), var(--c2, #06b6d4));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .top3-score.rank1 { font-size: 28px; }
+  .top3-score.rank2 { font-size: 22px; }
+  .top3-score.rank3 { font-size: 18px; }
+  .top3-pts-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); }
+
+  .tie-pill {
+    font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 100px;
+    background: rgba(212,168,67,0.12); border: 1px solid rgba(212,168,67,0.3);
+    color: var(--gold); flex-shrink: 0;
+  }
+
   /* ══════════════════════════════════════════
      FOOTER
   ══════════════════════════════════════════ */
@@ -465,7 +520,7 @@
 
     <!-- CATEGORY WINNERS -->
     <section id="categories" class="fade-in d3">
-      <div class="section-label">🏅 Category Winners</div>
+      <div class="section-label">🏅 Category Top 3</div>
       <div class="cat-winners-grid" id="cat-winners-grid"></div>
     </section>
 
@@ -609,11 +664,14 @@ function renderChampion(overall) {
 }
 
 /* ══════════════════════════════════════════
-   RENDER CATEGORY WINNERS
+   RENDER CATEGORY TOP 3
 ══════════════════════════════════════════ */
 function renderCategoryWinners(catLeaders) {
   const grid = document.getElementById('cat-winners-grid');
   grid.innerHTML = '';
+
+  const MEDALS = ['🥇','🥈','🥉'];
+  const RANK_SIZE = ['rank1','rank2','rank3'];
 
   CATEGORIES.forEach(cat => {
     const leaders = catLeaders[cat.id] || [];
@@ -630,60 +688,45 @@ function renderCategoryWinners(catLeaders) {
     let bodyHtml = '';
 
     if (!leaders.length) {
-      bodyHtml = `
-        <div class="cat-winner-body">
-          <div class="no-winner">⏳ <span>No scores recorded yet</span></div>
-        </div>`;
+      bodyHtml = `<div class="cat-winner-body"><div class="no-winner">⏳ <span>No scores recorded yet</span></div></div>`;
     } else {
-      /* collect all tied at rank 1 */
-      const topPts  = leaders[0].points;
-      const winners = leaders.filter(l => l.points === topPts);
-      const isTie   = winners.length > 1;
+      /* Build display rows respecting tie-aware ranks.
+         We show every entry whose rank <= 3, so ties can expand the list. */
+      const top3 = leaders.filter(l => l.rank <= 3);
 
-      if (isTie) {
-        /* Multiple tied winners in this category */
-        const rowsHtml = winners.map(w => {
-          const c = colorFor(w.name);
-          return `
-            <div class="tied-winner-row">
-              <span class="tie-label">🥇 TIE</span>
-              <div class="winner-avatar" style="width:44px;height:44px;font-size:14px;background:linear-gradient(135deg,var(--c1),var(--c2))">
-                ${initials(w.name)}
-                <span class="medal">🥇</span>
+      /* Group by rank so we can show tied entries together */
+      const byRank = { 1: [], 2: [], 3: [] };
+      for (const l of top3) {
+        if (byRank[l.rank]) byRank[l.rank].push(l);
+      }
+
+      let rowsHtml = '';
+      for (const rank of [1, 2, 3]) {
+        const group = byRank[rank];
+        if (!group.length) continue;
+        const rs = RANK_SIZE[rank - 1];
+        const medal = MEDALS[rank - 1];
+        const isTied = group.length > 1;
+
+        for (const w of group) {
+          rowsHtml += `
+            <div class="top3-row">
+              <div class="top3-rank">${medal}</div>
+              <div class="top3-avatar">${initials(w.name)}</div>
+              <div class="top3-info">
+                <div class="top3-name ${rs}">${w.name}</div>
+                <span class="top3-dept-pill ${w.dept}">${w.dept}</span>
               </div>
-              <div class="winner-info">
-                <div class="winner-name" style="font-size:14px">${w.name}</div>
-                <span class="winner-dept-pill ${w.dept}">${w.dept}</span>
-              </div>
-              <div class="winner-score-wrap">
-                <div class="winner-score" style="font-size:28px">${w.points}</div>
-                <div class="winner-pts-label">pts</div>
+              ${isTied ? '<span class="tie-pill">TIE</span>' : ''}
+              <div class="top3-score-wrap">
+                <div class="top3-score ${rs}">${w.points}</div>
+                <div class="top3-pts-label">pts</div>
               </div>
             </div>`;
-        }).join('');
-
-        bodyHtml = `<div class="cat-winner-body"><div class="tied-winners-list">${rowsHtml}</div></div>`;
-      } else {
-        /* Single winner */
-        const w = winners[0];
-        bodyHtml = `
-          <div class="cat-winner-body">
-            <div class="winner-row">
-              <div class="winner-avatar" style="background:linear-gradient(135deg,var(--c1),var(--c2))">
-                ${initials(w.name)}
-                <span class="medal">🥇</span>
-              </div>
-              <div class="winner-info">
-                <div class="winner-name">${w.name}</div>
-                <span class="winner-dept-pill ${w.dept}">${w.dept}</span>
-              </div>
-              <div class="winner-score-wrap">
-                <div class="winner-score">${w.points}</div>
-                <div class="winner-pts-label">pts</div>
-              </div>
-            </div>
-          </div>`;
+        }
       }
+
+      bodyHtml = `<div class="cat-winner-body"><div class="top3-list">${rowsHtml}</div></div>`;
     }
 
     card.innerHTML = headerHtml + bodyHtml;
