@@ -223,7 +223,7 @@ mongoose.connect(MONGO_URI)
     });
     
     app.get('/winners.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'scores.html'));
+    res.sendFile(path.join(__dirname, 'public', 'winners.html'));
     });
     
     // ── START SERVER ──
