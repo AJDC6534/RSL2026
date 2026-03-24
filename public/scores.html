@@ -427,15 +427,25 @@ function renderStudents(students, scoreMap) {
   grid.innerHTML = students.map(s => {
     const c      = colorFor(s.name);
     const scores = scoreMap[s._id] || [];
-    const total  = scores.reduce((sum, sc) => sum + sc.points, 0);
+    const isTieName = n => {
+      const l = (n || '').toLowerCase();
+      return l.includes('tiebreaker') || l.includes('tie breaker') || l.includes('tie-breaker');
+    };
+    // total includes ALL scores (including tiebreakers)
+    const total = scores.reduce((sum, sc) => sum + sc.points, 0);
+    // display only hides tiebreaker rows
+    const displayScores = scores.filter(sc => !isTieName(sc.competition?.name));
 
     let scoresHtml = '';
-    if (scores.length === 0) {
+    if (displayScores.length === 0) {
       scoresHtml = '<div class="no-scores">No scores recorded yet</div>';
     } else {
+      // Filter out tiebreaker competitions
+      const nonTie = displayScores;
+
       // Sort by category order then competition name
       const catOrder = { ace1: 0, ace2: 1, arena1: 2, arena2: 3 };
-      const sorted = [...scores].sort((a, b) => {
+      const sorted = [...nonTie].sort((a, b) => {
         const ca = catOrder[a.competition?.category] ?? 99;
         const cb = catOrder[b.competition?.category] ?? 99;
         if (ca !== cb) return ca - cb;
